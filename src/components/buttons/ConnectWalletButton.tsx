@@ -1,5 +1,8 @@
+'use client';
+
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-export const YourApp = () => {
+import Image from 'next/image';
+export const ConnectWalletButton = () => {
   return (
     <ConnectButton.Custom>
       {({
@@ -31,7 +34,11 @@ export const YourApp = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button onClick={openConnectModal} type='button'>
+                  <button
+                    onClick={openConnectModal}
+                    type='button'
+                    className='text-white bg-black'
+                  >
                     Connect Wallet
                   </button>
                 );
@@ -62,7 +69,7 @@ export const YourApp = () => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}

@@ -4,6 +4,8 @@ import * as React from 'react';
 import '@/styles/globals.css';
 import '@/styles/colors.css';
 
+import Header from '@/components/shared/Header';
+
 import { Providers } from '@/app/providers';
 import { siteConfig } from '@/constant/config';
 
@@ -47,7 +49,12 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className='bg-[url("/svg/bg.png")] bg-cover bg-center h-screen'>
+            <Header />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
