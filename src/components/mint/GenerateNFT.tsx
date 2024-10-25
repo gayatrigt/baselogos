@@ -1,9 +1,10 @@
 'use client';
 
-import BaseLogo from 'public/svg/base-logo.svg';
-import MinusIcon from 'public/svg/minus.svg';
-import PlusIcon from 'public/svg/plus.svg';
 import { ChangeEvent, useState } from 'react';
+
+import BaseLogo from '../../../public/svg/base-logo.svg';
+import MinusIcon from '../../../public/svg/minus.svg';
+import PlusIcon from '../../../public/svg/plus.svg';
 
 interface GenerateNFTProps {
   onGenerate: () => void;

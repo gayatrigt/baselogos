@@ -1,8 +1,8 @@
-import Baselogo from 'public/svg/base-logo.svg';
-import DownloadIcon from 'public/svg/download.svg';
-import OpenSeaIcon from 'public/svg/open-sea.svg';
-import WarpcastIcon from 'public/svg/warpcast.svg';
-import XIcon from 'public/svg/x.svg';
+import Baselogo from '../../../public/svg/base-logo.svg';
+import DownloadIcon from '../../../public/svg/download.svg';
+import OpenSeaIcon from '../../../public/svg/open-sea.svg';
+import WarpcastIcon from '../../../public/svg/warpcast.svg';
+import XIcon from '../../../public/svg/x.svg';
 
 export default function ShareNft() {
   return (

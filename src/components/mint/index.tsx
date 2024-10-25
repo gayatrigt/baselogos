@@ -1,7 +1,8 @@
 'use client';
 
-import Baselogo from 'public/svg/base-logo.svg';
 import { useEffect, useRef, useState } from 'react';
+
+import Baselogo from '../../../public/svg/base-logo.svg';
 
 export default function Mint() {
   const scrollRef = useRef<HTMLDivElement>(null);
