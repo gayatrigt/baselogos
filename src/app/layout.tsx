@@ -50,9 +50,21 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          <div className='bg-[url("/svg/bg.png")] bg-cover bg-center h-screen'>
-            <Header />
-            {children}
+          <div className='relative h-screen overflow-hidden'>
+            <div className='absolute inset-0 -z-10'>
+              <div className='absolute inset-0 bg-[url("/images/bg.png")] bg-cover bg-center' />
+            </div>
+            <div className='relative z-10 h-full'>
+              <Header />
+              <main className='h-full'>{children}</main>
+            </div>
+            <div className='absolute bottom-0 left-0 right-0 pointer-events-none z-0'>
+              <img
+                src='/svg/footer-text.svg'
+                alt='Footer Text'
+                className='w-full h-auto object-cover object-bottom'
+              />
+            </div>
           </div>
         </Providers>
       </body>

@@ -42,7 +42,9 @@
   }
 
   .cursor-newtab {
-    cursor: url('/images/new-tab.png') 10 10, pointer;
+    cursor:
+      url('/images/new-tab.png') 10 10,
+      pointer;
   }
 
   /* #region  /**=========== Typography =========== */
@@ -100,8 +102,12 @@
         var(--color-primary-400),
         var(--color-primary-500)
       );
-    background-size: 100% 2px, 0 2px;
-    background-position: 100% 100%, 0 100%;
+    background-size:
+      100% 2px,
+      0 2px;
+    background-position:
+      100% 100%,
+      0 100%;
     background-repeat: no-repeat;
   }
   @media (prefers-reduced-motion: no-preference) {
@@ -113,6 +119,56 @@
   }
   .animated-underline:hover,
   .animated-underline:focus-visible {
-    background-size: 0 2px, 100% 2px;
+    background-size:
+      0 2px,
+      100% 2px;
   }
+}
+
+.hover-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hover-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hover-scroll:hover {
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+}
+
+.hover-scroll:hover::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+
+.hover-scroll:hover::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin: 4px 0;
+}
+
+.hover-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hover-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.hover-scroll {
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
 }

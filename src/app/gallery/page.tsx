@@ -61,48 +61,6 @@ export default function GalleryPage() {
             <div className='absolute bottom-0 left-0 right-2 h-12 bg-gradient-to-t from-black/20 via-black/5 to-transparent z-10 pointer-events-none' />
           )}
         </div>
-        <style>
-          {`
-            .hover-scroll {
-              scrollbar-width: none;
-              -ms-overflow-style: none;
-            }
-
-            .hover-scroll::-webkit-scrollbar {
-              display: none;
-            }
-
-            .hover-scroll:hover {
-              scrollbar-width: thin;
-              -ms-overflow-style: auto;
-            }
-
-            .hover-scroll:hover::-webkit-scrollbar {
-              width: 6px;
-              background-color: transparent;
-            }
-            
-            .hover-scroll:hover::-webkit-scrollbar-track {
-              background: rgba(255, 255, 255, 0.1);
-              border-radius: 3px;
-              margin: 4px 0;
-            }
-            
-            .hover-scroll:hover::-webkit-scrollbar-thumb {
-              background: rgba(255, 255, 255, 0.2);
-              border-radius: 3px;
-              border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            
-            .hover-scroll:hover::-webkit-scrollbar-thumb:hover {
-              background: rgba(255, 255, 255, 0.3);
-            }
-
-            .hover-scroll {
-              scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
-            }
-          `}
-        </style>
       </div>
     </div>
   );
