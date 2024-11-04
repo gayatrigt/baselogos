@@ -7,7 +7,7 @@ import MinusIcon from '../../../public/svg/minus.svg';
 import PlusIcon from '../../../public/svg/plus.svg';
 
 interface GenerateNFTProps {
-  onGenerate: () => void;
+  onGenerate: (value: number) => void;
 }
 
 const GenerateNFT = ({ onGenerate }: GenerateNFTProps) => {
@@ -29,14 +29,14 @@ const GenerateNFT = ({ onGenerate }: GenerateNFTProps) => {
   };
 
   return (
-    <div className=' rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 lg:h-[65vh] lg:max-w-max w-full'>
+    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 lg:h-[65vh] lg:max-w-max w-full'>
       <div className='flex flex-col h-full'>
         <div className='lg:flex-1 lg:min-h-0 lg:relative lg:w-[470px] mb-5'>
           <BaseLogo className='h-full lg:w-[470px] lg:absolute lg:inset-0 lg:object-contain w-full' />
         </div>
-        <div className=' flex sm:gap-5 gap-3 mt-auto'>
+        <div className='flex sm:gap-5 gap-3 mt-auto'>
           <button
-            onClick={onGenerate}
+            onClick={() => onGenerate(value)}
             className='rounded sm:py-3 sm:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 sm:text-base text-xs font-medium w-full hover:bg-white/85 transition-colors whitespace-nowrap'
           >
             Generate Random

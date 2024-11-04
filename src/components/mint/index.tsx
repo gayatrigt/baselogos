@@ -2,12 +2,22 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { useGetRandomColors } from '@/hooks/useGetRandomColors';
+
 import Baselogo from '../../../public/svg/base-logo.svg';
 
-export default function Mint() {
+interface MintProps {
+  count: number;
+}
+
+export default function Mint({ count }: MintProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showTopBlur, setShowTopBlur] = useState(false);
   const [showBottomBlur, setShowBottomBlur] = useState(false);
+
+  const { colors, isLoading } = useGetRandomColors({
+    count,
+  });
 
   const handleScroll = () => {
     const element = scrollRef.current;
@@ -31,6 +41,10 @@ export default function Mint() {
     }
   }, []);
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 flex flex-col lg:h-[65vh] h-[55vh] lg:w-full w-fit'>
       <div className='relative flex-1 min-h-0'>
@@ -42,66 +56,15 @@ export default function Mint() {
           onScroll={handleScroll}
           className='grid lg:grid-cols-4 grid-cols-3 md:gap-x-5 gap-x-3 gap-y-1 overflow-y-auto pr-2 h-full hover-scroll content-start'
         >
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
-          <Baselogo
-            width={131}
-            height={131}
-            className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
-          />
+          {colors.map((color, index) => (
+            <div key={index} style={{ backgroundColor: color }}>
+              <Baselogo
+                width={131}
+                height={131}
+                className='rounded transition-transform duration-300 hover:scale-105 cursor-pointer lg:w-[130px] lg:h-[130px] w-[90px] h-[90px]'
+              />
+            </div>
+          ))}
         </div>
         {showBottomBlur && (
           <div className='absolute bottom-0 left-0 right-1 h-12 bg-gradient-to-t from-black/20 via-black/5 to-transparent z-10 pointer-events-none' />
