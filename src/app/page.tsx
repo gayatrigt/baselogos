@@ -7,8 +7,10 @@ import GenerateNFT from '@/components/mint/GenerateNFT';
 
 export default function HomePage() {
   const [showMint, setShowMint] = useState(false);
+  const [count, setCount] = useState(1);
 
-  const handleGenerate = () => {
+  const handleGenerate = (value: number) => {
+    setCount(value);
     setShowMint(true);
   };
 
@@ -19,7 +21,9 @@ export default function HomePage() {
       </h1>
       <div className='flex flex-row gap-7 items-stretch justify-center md:mt-7 mt-5'>
         <GenerateNFT onGenerate={handleGenerate} />
-        <div className='md:flex hidden w-full'>{showMint && <Mint />}</div>
+        <div className='md:flex hidden w-full'>
+          {showMint && <Mint count={count} />}
+        </div>
         {showMint && (
           <div
             className='md:hidden fixed inset-0 bg-white/5 backdrop-blur-sm z-50 flex items-center justify-center p-5'
@@ -29,7 +33,7 @@ export default function HomePage() {
               className='relative w-full max-w-lg flex items-center justify-center'
               onClick={(e) => e.stopPropagation()}
             >
-              <Mint />
+              <Mint count={count} />
             </div>
           </div>
         )}
