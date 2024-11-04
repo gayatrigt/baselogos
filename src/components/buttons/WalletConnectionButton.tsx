@@ -46,7 +46,7 @@ export default function WalletConnectionButton() {
             withWalletAggregator={true}
             className='font-bold flex items-center bg-black hover:bg-black/80'
           >
-            <Name className='text-white text-base font-sans' />
+            <Name className='text-white md:text-base text-sm font-sans' />
           </ConnectWallet>
           <WalletDropdown className='z-50 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl hover:bg-black/20'>
             <Identity

@@ -61,7 +61,7 @@ export default function GalleryPage() {
 
   return (
     <div className='mx-auto flex flex-col w-screen items-center justify-center px-5'>
-      <div className='flex items-center justify-between md:mt-7 mt-5'>
+      <div className='flex items-center justify-between md:mt-7 mt-5 flex-col gap-2'>
         <h1 className='text-black md:text-6xl text-2xl font-semibold'>
           Gallery
         </h1>
