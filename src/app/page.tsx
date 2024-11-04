@@ -2,16 +2,15 @@
 
 import { useState } from 'react';
 
-import Mint from '@/components/mint';
 import GenerateNFT from '@/components/mint/GenerateNFT';
 
 export default function HomePage() {
-  const [showMint, setShowMint] = useState(false);
+  // const [showMint, setShowMint] = useState(false);
   const [count, setCount] = useState(1);
 
   const handleGenerate = (value: number) => {
     setCount(value);
-    setShowMint(true);
+    // setShowMint(true);
   };
 
   return (
@@ -21,10 +20,10 @@ export default function HomePage() {
       </h1>
       <div className='flex flex-row gap-7 items-stretch justify-center md:mt-7 mt-5'>
         <GenerateNFT onGenerate={handleGenerate} />
-        <div className='md:flex hidden w-full'>
+        {/* <div className='md:flex hidden w-full'>
           {showMint && <Mint count={count} />}
-        </div>
-        {showMint && (
+        </div> */}
+        {/* {showMint && (
           <div
             className='md:hidden fixed inset-0 bg-white/5 backdrop-blur-sm z-50 flex items-center justify-center p-5'
             onClick={() => setShowMint(false)}
@@ -36,7 +35,7 @@ export default function HomePage() {
               <Mint count={count} />
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </main>
   );

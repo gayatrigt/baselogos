@@ -39,7 +39,7 @@ const GenerateNFT = ({ onGenerate }: GenerateNFTProps) => {
             onClick={() => onGenerate(value)}
             className='rounded sm:py-3 sm:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 sm:text-base text-xs font-medium w-full hover:bg-white/85 transition-colors whitespace-nowrap'
           >
-            Generate Random
+            Mint All
           </button>
           <div className='flex items-center gap-2 justify-start'>
             <button
