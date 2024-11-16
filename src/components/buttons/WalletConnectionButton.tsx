@@ -39,7 +39,7 @@ export default function WalletConnectionButton() {
   }
 
   return (
-    <div>
+    <div className='w-full'>
       {address && (
         <Wallet>
           <ConnectWallet
@@ -74,7 +74,7 @@ export default function WalletConnectionButton() {
       {!address && (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button className='text-white md:text-sm text-xs font-medium py-3 px-4 bg-black rounded hover:bg-black/80'>
+            <button className='text-white md:text-sm text-xs font-medium py-3 px-4 bg-black rounded hover:bg-black/80 w-full'>
               Connect Wallet
             </button>
           </DropdownMenu.Trigger>

@@ -6,7 +6,9 @@ export default function Header() {
       <span className='text-black/90 md:text-2xl text-sm font-bold'>
         BaseLogos
       </span>
-      <WalletConnectionButton />
+      <div>
+        <WalletConnectionButton />
+      </div>
     </div>
   );
 }

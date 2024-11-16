@@ -17,9 +17,10 @@ export default function HomePage() {
       <h1 className='md:mt-7 mt-5 text-black md:text-6xl text-2xl font-semibold'>
         Mint your NFT
       </h1>
+   
       <div className='flex flex-row gap-7 items-stretch justify-center md:mt-7 mt-5'>
         <GenerateNFT onGenerate={handleGenerate} />
-        <div className='md:flex hidden w-full'>{showMint && <Mint />}</div>
+        {/* <div className='md:flex hidden w-full'>{showMint && <Mint />}</div> */}
         {showMint && (
           <div
             className='md:hidden fixed inset-0 bg-white/5 backdrop-blur-sm z-50 flex items-center justify-center p-5'

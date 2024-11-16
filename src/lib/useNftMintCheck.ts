@@ -1,0 +1,34 @@
+import { nftContractAbi } from '@/lib/nftContractAbi'
+import { useAccount, useBalance, useReadContract } from 'wagmi'
+
+export const useNftMintCheck = () => {
+    const { address } = useAccount()
+
+    const { data: mintPrice } = useReadContract({
+        address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as any,
+        abi: nftContractAbi,
+        functionName: "MINT_PRICE",
+    })
+
+    const { data: balance } = useBalance({
+        address,
+    })
+
+    const hasEnoughBalance = (): boolean => {
+        if (!mintPrice || !balance) {
+            return false
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        const ethMintPriceInWei = BigInt(mintPrice.toString())
+        const balanceInWei = balance.value
+
+        return balanceInWei >= ethMintPriceInWei
+    }
+
+    return {
+        mintPrice,
+        balance,
+        hasEnoughBalance,
+    }
+}
