@@ -33,16 +33,17 @@ const GenerateNFT = () => {
 
         <BaseLogoPreview className='h-full lg:inset-0 lg:object-contain w-full mb-5' />
        
-        <div className=' flex sm:gap-5 gap-3 mt-auto'>
-          <div className='flex items-center gap-2 justify-start'>
+        <div className='flex justify-center'>
+      
+          <div className='flex items-center space-x-2 w-1/2'>
             <button
               onClick={handleDecrement}
-              className='p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
+              className='hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
             >
               <MinusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
             <input
-              className='rounded sm:py-3 sm:px-4 py-2 px-2.5  border-none bg-white/75 backdrop-blur-2xl text-black/90 text-xs sm:text-base font-medium w-16 sm:w-20 text-center focus:ring-2 focus:ring-white/25 focus:outline-none'
+              className='rounded sm:py-3 sm:px-4 py-2 px-2.5 border-none bg-white/75 backdrop-blur-2xl text-black/90 text-xs sm:text-base font-medium w-16 sm:w-20 text-center focus:ring-2 focus:ring-white/25 focus:outline-none'
               min={1}
               type='number'
               value={value}
@@ -50,7 +51,7 @@ const GenerateNFT = () => {
             />
             <button
               onClick={handleIncrement}
-              className='p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
+              className='hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
             >
               <PlusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
@@ -63,8 +64,9 @@ const GenerateNFT = () => {
             Mint
           </button> */}
 
-          <MintButton />
-          
+          <div>
+            <MintButton />
+          </div>
         </div>
       </div>
     </div>

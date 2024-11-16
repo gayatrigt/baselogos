@@ -9,7 +9,7 @@ import { LifecycleStatus, Transaction, TransactionButton } from '@coinbase/oncha
 // import { toast } from "./ui/use-toast";
 // import { Call } from 'node_modules/@coinbase/onchainkit/esm/transaction/types';
 import { twMerge } from "tailwind-merge";
-import { decodeEventLog, encodeFunctionData, formatEther } from "viem";
+import { encodeFunctionData, formatEther } from "viem";
 import { useAccount, useSwitchChain } from "wagmi";
 import { baseSepolia } from 'wagmi/chains';
 
@@ -53,60 +53,60 @@ export function MintButton() {
         return `Mint for ${mintPrice && formatEther(mintPrice)} ETH`;
     }
 
-    const getTokenUriFromHash = async (hash: string) => {
+    // const getTokenUriFromHash = async (hash: string) => {
 
-        const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as any });
+    //     const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as any });
 
-        if (!receipt) {
-            throw new Error('Transaction failed');
-        }
+    //     if (!receipt) {
+    //         throw new Error('Transaction failed');
+    //     }
 
-        // Find the Transfer event in the logs
-        const transferLog = receipt.logs.find((log) => {
+    //     // Find the Transfer event in the logs
+    //     const transferLog = receipt.logs.find((log) => {
 
-            try {
-                const event = decodeEventLog({
-                    abi: nftContractAbi,
-                    data: log.data,
-                    topics: log.topics,
-                })
-                return event.eventName === 'Transfer' && (event.args as any)?.from === '0x0000000000000000000000000000000000000000'
-            } catch {
-                return false
-            }
-        })
+    //         try {
+    //             const event = decodeEventLog({
+    //                 abi: nftContractAbi,
+    //                 data: log.data,
+    //                 topics: log.topics,
+    //             })
+    //             return event.eventName === 'Transfer' && (event.args as any)?.from === '0x0000000000000000000000000000000000000000'
+    //         } catch {
+    //             return false
+    //         }
+    //     })
 
-        if (!transferLog) {
-            throw new Error('No mint Transfer event found in the transaction')
-        }
+    //     if (!transferLog) {
+    //         throw new Error('No mint Transfer event found in the transaction')
+    //     }
 
-        // Parse the Transfer event to get the token ID
-        const event = decodeEventLog({
-            abi: nftContractAbi,
-            data: transferLog.data,
-            topics: transferLog.topics,
-        })
-        const tokenId: number = (event.args as any)?.tokenId
-
-
-        // Get the token URI
-        const tokenURI = await publicClient.readContract({
-            address: nftContractAddress as any,
-            abi: nftContractAbi,
-            functionName: 'tokenURI',
-            args: [tokenId],
-        })
+    //     // Parse the Transfer event to get the token ID
+    //     const event = decodeEventLog({
+    //         abi: nftContractAbi,
+    //         data: transferLog.data,
+    //         topics: transferLog.topics,
+    //     })
+    //     const tokenId: number = (event.args as any)?.tokenId
 
 
-        if (!tokenURI) {
-            throw new Error('Failed to fetch token URI')
-        }
+    //     // Get the token URI
+    //     const tokenURI = await publicClient.readContract({
+    //         address: nftContractAddress as any,
+    //         abi: nftContractAbi,
+    //         functionName: 'tokenURI',
+    //         args: [tokenId],
+    //     })
 
-        // Fetch the JSON from the URI
-        const tokenData = await fetch(tokenURI as string).then(response => response.json())
 
-        return { tokenId, tokenURI, tokenData }
-    }
+    //     if (!tokenURI) {
+    //         throw new Error('Failed to fetch token URI')
+    //     }
+
+    //     // Fetch the JSON from the URI
+    //     const tokenData = await fetch(tokenURI as string).then(response => response.json())
+
+    //     return { tokenId, tokenURI, tokenData }
+    // }
 
     const handleOnStatus = async (status: LifecycleStatus) => {
         // setSidebarMode("loading");
@@ -122,14 +122,13 @@ export function MintButton() {
         }
 
         try {
-
-            const tokenDataRes = await getTokenUriFromHash(hash)
+            // const tokenDataRes = await getTokenUriFromHash(hash)
             // setMintedNftMetadata(tokenDataRes.tokenData)
 
             // await fetchOwnedArrows(account.address as any);
             // setSidebarMode("success");
 
-            router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
+            // router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
             // setSidebarMode("success");
             // setTextValue([])
         } catch (error) {
@@ -193,7 +192,7 @@ export function MintButton() {
                     <TransactionButton
                         disabled={!hasEnoughBalance()}
                         className={twMerge(
-                            'w-full h-full bg-brand text-white py-3 cursor-pointer font-medium tracking-wider text-xl hover:bg-brand/80 focus:bg-brand/80 flex items-center justify-center space-x-2 rounded-none',
+                            'w-full h-full bg-brand text-white py-3 cursor-pointer font-medium tracking-wider text-xl hover:bg-brand/80 focus:bg-brand/80 flex items-center justify-center space-x-2 rounded-md',
                             "inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 font-bold uppercase  cursor-pointer [&>*]:text-white ",
                             "bg-blue-600 text-white hover:bg-blue-600/90"
                         )}
