@@ -8,18 +8,10 @@ import GenerateNFT from '@/components/mint/GenerateNFT';
 export default function HomePage() {
   const [showMint, setShowMint] = useState(false);
 
-  const handleGenerate = () => {
-    setShowMint(true);
-  };
-
   return (
-    <main className='mx-auto flex flex-col w-screen items-center justify-center px-5'>
-      <h1 className='md:mt-7 mt-5 text-black md:text-6xl text-2xl font-semibold'>
-        Mint your NFT
-      </h1>
-   
-      <div className='flex flex-row gap-7 items-stretch justify-center md:mt-7 mt-5'>
-        <GenerateNFT onGenerate={handleGenerate} />
+    <>
+        <GenerateNFT />
+        
         {/* <div className='md:flex hidden w-full'>{showMint && <Mint />}</div> */}
         {showMint && (
           <div
@@ -34,7 +26,6 @@ export default function HomePage() {
             </div>
           </div>
         )}
-      </div>
-    </main>
+    </>
   );
 }

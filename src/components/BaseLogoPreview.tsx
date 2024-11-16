@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 
 const BaseLogoPreview: React.FC<{className?: string}> = ({className}) => {
   const [color, setColor] = useState('#ff0000');
@@ -24,7 +24,7 @@ const BaseLogoPreview: React.FC<{className?: string}> = ({className}) => {
 
   return (
     <div className={classNames(
-      "flex items-center justify-center min-h-[200px] relative  rounded-lg shadow-lg overflow-hidden",
+      "flex items-center justify-center min-h-[200px] relative rounded-lg shadow-lg overflow-hidden",
       className
     )}>
       <div 

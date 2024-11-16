@@ -9,11 +9,7 @@ import { MintButton } from '@/components/MintButton';
 import MinusIcon from '../../../public/svg/minus.svg';
 import PlusIcon from '../../../public/svg/plus.svg';
 
-interface GenerateNFTProps {
-  onGenerate: () => void;
-}
-
-const GenerateNFT = ({ onGenerate }: GenerateNFTProps) => {
+const GenerateNFT = () => {
   const [value, setValue] = useState(1);
 
   const handleIncrement = () => {
@@ -32,11 +28,10 @@ const GenerateNFT = ({ onGenerate }: GenerateNFTProps) => {
   };
 
   return (
-    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 lg:max-w-max w-full'>
+    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 w-full max-w-xl'>
       <div className='flex flex-col h-full'>
-        <div className='lg:flex-1 lg:min-h-0 lg:relative lg:w-[470px] mb-5'>
-          <BaseLogoPreview className='h-full lg:w-[470px] lg:inset-0 lg:object-contain w-full' />
-        </div>
+
+        <BaseLogoPreview className='h-full lg:inset-0 lg:object-contain w-full mb-5' />
        
         <div className=' flex sm:gap-5 gap-3 mt-auto'>
           <div className='flex items-center gap-2 justify-start'>
