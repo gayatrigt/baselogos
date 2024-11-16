@@ -2,15 +2,21 @@
 
 import { ChangeEvent, useState } from 'react';
 
+// import BaseLogo from '../../../public/svg/base-logo.svg';
 import BaseLogoPreview from '@/components/BaseLogoPreview';
 import { MintButton } from '@/components/MintButton';
 
-// import BaseLogo from '../../../public/svg/base-logo.svg';
 import MinusIcon from '../../../public/svg/minus.svg';
 import PlusIcon from '../../../public/svg/plus.svg';
 
 const GenerateNFT = () => {
   const [value, setValue] = useState(1);
+
+  // const { data: tokenCount } = useReadContract({
+  //       address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as any,
+  //       abi: nftContractAbi,
+  //       functionName: "TOKEN_COUNT",
+  //   })
 
   const handleIncrement = () => {
     setValue((prev) => prev + 1);
@@ -56,16 +62,9 @@ const GenerateNFT = () => {
               <PlusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
           </div>
-          
-          {/* <button
-            onClick={onGenerate}
-            className='rounded sm:py-3 sm:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 sm:text-base text-xs font-medium w-full hover:bg-white/85 transition-colors whitespace-nowrap'
-          >
-            Mint
-          </button> */}
 
           <div>
-            <MintButton />
+            <MintButton quantity={value} />
           </div>
         </div>
       </div>

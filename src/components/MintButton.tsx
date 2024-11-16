@@ -1,168 +1,111 @@
 "use client"
 
-
-import { LifecycleStatus, Transaction, TransactionButton } from '@coinbase/onchainkit/transaction';
-// import { useRouter } from "next/router";
-// import { nftContractAbi } from "~/utils/abi";
-// import { wagmiConfig } from '~/utils/rainbowConfig';
-// import { useNftMintCheck } from "~/utils/useNftMintCheck";
-// import { toast } from "./ui/use-toast";
-// import { Call } from 'node_modules/@coinbase/onchainkit/esm/transaction/types';
+import { Transaction, TransactionButton } from '@coinbase/onchainkit/transaction';
+import { useEffect, useState } from 'react';
 import { twMerge } from "tailwind-merge";
 import { encodeFunctionData, formatEther } from "viem";
-import { useAccount, useSwitchChain } from "wagmi";
+import { useAccount } from "wagmi";
 import { baseSepolia } from 'wagmi/chains';
 
 import { nftContractAbi } from '@/lib/nftContractAbi';
 import { useNftMintCheck } from '@/lib/useNftMintCheck';
 
 import WalletConnectionButton from '@/components/buttons/WalletConnectionButton';
-// import { Button } from './ui/button';
-// import useWalletPopupStore from '~/stores/useWalletPopupStore';
+
 
 const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
-// const higherTokenAddress = env.NEXT_PUBLIC_ALT_PAYMENT_CONTRACT_ADDRESS;
 
 
-export function MintButton() {
-    // const { setSidebarMode, } = useColorStore();
-    // const { setOpen: setWalletPopup } = useWalletPopupStore()
-    // const { setTextValue } = useMintStore()
-    const {mintPrice, balance, hasEnoughBalance,} = useNftMintCheck()
-    const { switchChain } = useSwitchChain()
-    const account = useAccount()
-
+interface MintButtonProps {
+    quantity: number
+}
+export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
+    const { mintPrice, hasEnoughBalance } = useNftMintCheck()
     const { address } = useAccount()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [tokens, setTokens] = useState<number[]>([])
+    
+    const fetchEligibleTokens = async () => {
+        try {
+            if(!loading) return
 
-    // const router = useRouter()
+            setLoading(true)
+            setError(null)
+            
+            const response = await fetch('/api/eligible-tokens?quantity=5')
+            const data = await response.json()
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to fetch eligible tokens')
+            }
+            
+            setTokens(data.tokens)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to fetch tokens')
+        } finally {
+            setLoading(false)
+        }
+    }
 
-    // const publicClient = usePublicClient({
-    //     chainId: base.id,
-    //     config: wagmiConfig
-    // })
-
-    // const { textValue: mintText } = useMintStore()
-    // const validWordReq = useReadContract({
-    //     address: nftContractAddress as any,
-    //     abi: nftContractAbi,
-    //     functionName: 'wordVerify',
-    //     args: [mintText.map(text => text.trim().toUpperCase())]
-    // })
     const getButtonText = () => {
         if (!hasEnoughBalance()) return "Insufficient Balance";
         return `Mint for ${mintPrice && formatEther(mintPrice)} ETH`;
     }
 
-    // const getTokenUriFromHash = async (hash: string) => {
+    // const handleOnStatus = async (status: LifecycleStatus) => {
+    //     // setSidebarMode("loading");
 
-    //     const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as any });
-
-    //     if (!receipt) {
-    //         throw new Error('Transaction failed');
+    //     if (status.statusName !== 'success') {
+    //         return
     //     }
 
-    //     // Find the Transfer event in the logs
-    //     const transferLog = receipt.logs.find((log) => {
+    //     const hash = status.statusData.transactionReceipts[0]?.transactionHash
 
-    //         try {
-    //             const event = decodeEventLog({
-    //                 abi: nftContractAbi,
-    //                 data: log.data,
-    //                 topics: log.topics,
-    //             })
-    //             return event.eventName === 'Transfer' && (event.args as any)?.from === '0x0000000000000000000000000000000000000000'
-    //         } catch {
-    //             return false
-    //         }
-    //     })
-
-    //     if (!transferLog) {
-    //         throw new Error('No mint Transfer event found in the transaction')
+    //     if (!hash) {
+    //         return;
     //     }
 
-    //     // Parse the Transfer event to get the token ID
-    //     const event = decodeEventLog({
-    //         abi: nftContractAbi,
-    //         data: transferLog.data,
-    //         topics: transferLog.topics,
-    //     })
-    //     const tokenId: number = (event.args as any)?.tokenId
+    //     try {
+    //         // const tokenDataRes = await getTokenUriFromHash(hash)
+    //         // setMintedNftMetadata(tokenDataRes.tokenData)
 
+    //         // await fetchOwnedArrows(account.address as any);
+    //         // setSidebarMode("success");
 
-    //     // Get the token URI
-    //     const tokenURI = await publicClient.readContract({
-    //         address: nftContractAddress as any,
-    //         abi: nftContractAbi,
-    //         functionName: 'tokenURI',
-    //         args: [tokenId],
-    //     })
+    //         // router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
+    //         // setSidebarMode("success");
+    //         // setTextValue([])
+    //     } catch (error) {
+    //         console.error(error);
 
+    //         // setSidebarMode("mint");
 
-    //     if (!tokenURI) {
-    //         throw new Error('Failed to fetch token URI')
+    //         const showToUser = (error as any).showToUser;
+    //         const errorMessage = (error as any).message;
+    //         // toast(
+    //         //     showToUser ? {
+    //         //         variant: "destructive",
+    //         //         title: errorMessage,
+    //         //     } : {
+    //         //         variant: "destructive",
+    //         //         title: 'Something went wrong.',
+    //         //         description: 'Could not mint NFT, please try again later.'
+    //         //     }
+    //         // );
     //     }
-
-    //     // Fetch the JSON from the URI
-    //     const tokenData = await fetch(tokenURI as string).then(response => response.json())
-
-    //     return { tokenId, tokenURI, tokenData }
     // }
-
-    const handleOnStatus = async (status: LifecycleStatus) => {
-        // setSidebarMode("loading");
-
-        if (status.statusName !== 'success') {
-            return
-        }
-
-        const hash = status.statusData.transactionReceipts[0]?.transactionHash
-
-        if (!hash) {
-            return;
-        }
-
-        try {
-            // const tokenDataRes = await getTokenUriFromHash(hash)
-            // setMintedNftMetadata(tokenDataRes.tokenData)
-
-            // await fetchOwnedArrows(account.address as any);
-            // setSidebarMode("success");
-
-            // router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
-            // setSidebarMode("success");
-            // setTextValue([])
-        } catch (error) {
-            console.error(error);
-
-            // setSidebarMode("mint");
-
-            const showToUser = (error as any).showToUser;
-            const errorMessage = (error as any).message;
-            // toast(
-            //     showToUser ? {
-            //         variant: "destructive",
-            //         title: errorMessage,
-            //     } : {
-            //         variant: "destructive",
-            //         title: 'Something went wrong.',
-            //         description: 'Could not mint NFT, please try again later.'
-            //     }
-            // );
-        }
-    }
-
-    const tokenId = 1
 
     const encodedData = encodeFunctionData({
         abi: nftContractAbi,
-        functionName: 'mint',
-        args: [BigInt(tokenId)],
+        functionName: "batchMint",
+        args: [tokens.map(i => BigInt(i))],
     });
 
     const mintContractCalls: any[] = [
         {
             // base sepolia
-            to: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as any,
+            to: nftContractAddress as any,
 
             // base mainnet
             // to: "0xdFaebb66DFeef3b7EfE3e1C6Be0e1d5448E5Ff7d",
@@ -171,6 +114,10 @@ export function MintButton() {
             value: mintPrice as any,
         },
     ];
+
+    useEffect(() => {
+        fetchEligibleTokens()
+    }, [quantity])
 
     return <div className="relative w-full">
         <div
@@ -185,9 +132,10 @@ export function MintButton() {
                 !!address &&
 
                 <Transaction
+                    key={quantity}
                     chainId={baseSepolia.id}
                     calls={mintContractCalls}
-                    onStatus={handleOnStatus}
+                    // onStatus={handleOnStatus}
                 >
                     <TransactionButton
                         disabled={!hasEnoughBalance()}
