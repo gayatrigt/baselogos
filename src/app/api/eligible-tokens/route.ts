@@ -1,15 +1,15 @@
 // app/api/eligible-tokens/route.ts
 import { NextResponse } from 'next/server'
 import { Address, createPublicClient, http } from 'viem'
-import { baseSepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 
 // Note: Move these to environment variables
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as Address
 
 // Create a singleton client instance
 const client = createPublicClient({
-    chain: baseSepolia,
-    transport: http()
+    chain: base,
+    transport: http(base.rpcUrls.default.http[0])
 })
 
 export async function GET(request: Request) {
@@ -17,6 +17,7 @@ export async function GET(request: Request) {
         // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
         const quantity = Math.min(Number(searchParams.get('quantity') || 5), 5)
+        console.log("🚀 ~ GET ~ quantity:", quantity)
 
         const selectedTokens: number[] = []
         let currentId = 0

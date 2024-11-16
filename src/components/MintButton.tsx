@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { twMerge } from "tailwind-merge";
 import { encodeFunctionData, formatEther } from "viem";
 import { useAccount } from "wagmi";
-import { baseSepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 
 import { nftContractAbi } from '@/lib/nftContractAbi';
 import { useNftMintCheck } from '@/lib/useNftMintCheck';
@@ -20,20 +20,22 @@ interface MintButtonProps {
     quantity: number
 }
 export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
+    console.log("🚀 ~ quantity:", quantity)
     const { mintPrice, hasEnoughBalance } = useNftMintCheck()
     const { address } = useAccount()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [tokens, setTokens] = useState<number[]>([])
+    console.log("🚀 ~ tokens:", tokens)
     
     const fetchEligibleTokens = async () => {
         try {
-            if(!loading) return
+            if(loading) return
 
             setLoading(true)
             setError(null)
             
-            const response = await fetch('/api/eligible-tokens?quantity=5')
+            const response = await fetch(`/api/eligible-tokens?quantity=${quantity}`)
             const data = await response.json()
             
             if (!response.ok) {
@@ -133,7 +135,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
 
                 <Transaction
                     key={quantity}
-                    chainId={baseSepolia.id}
+                    chainId={base.id}
                     calls={mintContractCalls}
                     // onStatus={handleOnStatus}
                 >
