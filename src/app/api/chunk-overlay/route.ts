@@ -45,7 +45,7 @@ export async function GET() {
     });
 
     const getOverlayCount = await publicClient.readContract({
-      address: contractAddress,
+      address: contractAddress as any,
       abi: nftContractAbi,
       functionName: "getChunkCount",
     });
@@ -61,7 +61,7 @@ export async function GET() {
 
     // Check if signer is contract owner
     const contractOwner = await publicClient.readContract({
-      address: contractAddress,
+      address: contractAddress as any,
       abi: nftContractAbi,
       functionName: 'owner',
     });
