@@ -3,8 +3,8 @@
 import { LifecycleStatus, Transaction, TransactionButton } from '@coinbase/onchainkit/transaction';
 import { useEffect, useState } from 'react';
 import { twMerge } from "tailwind-merge";
-import { encodeFunctionData, formatEther } from "viem";
-import { useAccount } from "wagmi";
+import { decodeEventLog, encodeFunctionData, formatEther } from "viem";
+import { useAccount, usePublicClient } from "wagmi";
 import { base } from 'wagmi/chains';
 
 import { nftContractAbi } from '@/lib/nftContractAbi';
@@ -12,6 +12,7 @@ import { useNftMintCheck } from '@/lib/useNftMintCheck';
 
 import WalletConnectionButton from '@/components/buttons/WalletConnectionButton';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 
 const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
@@ -22,12 +23,15 @@ interface MintButtonProps {
 export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
     console.log("🚀 ~ quantity:", quantity)
     const { mintPrice, hasEnoughBalance } = useNftMintCheck()
+    const router = useRouter()
 
     const { address } = useAccount()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [tokens, setTokens] = useState<number[]>([])
     // console.log("🚀 ~ tokens:", tokens)
+
+    const publicClient = usePublicClient()
     
     const fetchEligibleTokens = async () => {
         try {
@@ -57,6 +61,62 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
         return `Mint for ${mintPrice && formatEther(mintPrice * BigInt(quantity))} ETH`;
     }
 
+    const getTokenUriFromHash = async (hash: string) => {
+
+        if(!publicClient) return;
+
+        const receipt = await publicClient.waitForTransactionReceipt({ hash: hash as any });
+
+        if (!receipt) {
+            throw new Error('Transaction failed');
+        }
+
+        // Find the Transfer event in the logs
+        const transferLog = receipt.logs.find((log) => {
+            try {
+                const event = decodeEventLog({
+                    abi: nftContractAbi,
+                    data: log.data,
+                    topics: log.topics,
+                })
+                return event.eventName === 'Transfer' && (event.args as any)?.from === '0x0000000000000000000000000000000000000000'
+            } catch {
+                return false
+            }
+        })
+
+        if (!transferLog) {
+            throw new Error('No mint Transfer event found in the transaction')
+        }
+
+        // Parse the Transfer event to get the token ID
+        const event = decodeEventLog({
+            abi: nftContractAbi,
+            data: transferLog.data,
+            topics: transferLog.topics,
+        })
+        const tokenId: number = (event.args as any)?.tokenId
+
+
+        // Get the token URI
+        const tokenURI = await publicClient.readContract({
+            address: nftContractAddress as any,
+            abi: nftContractAbi,
+            functionName: 'tokenURI',
+            args: [BigInt(tokenId)],
+        })
+
+
+        if (!tokenURI) {
+            throw new Error('Failed to fetch token URI')
+        }
+
+        // Fetch the JSON from the URI
+        const tokenData = await fetch(tokenURI as string).then(response => response.json())
+
+        return { tokenId, tokenURI, tokenData }
+    }
+
     const handleOnStatus = async (status: LifecycleStatus) => {
         // setSidebarMode("loading");
 
@@ -69,6 +129,12 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
         if (!hash) {
             return;
         }
+
+        const tokenDataRes = await getTokenUriFromHash(hash)
+
+        if(!tokenDataRes) return;
+
+        router.push(`/share/${tokenDataRes.tokenId}`)
 
         toast.success('Successfully Minted!!!')
 
