@@ -15,13 +15,13 @@ import WalletConnectionButton from '@/components/buttons/WalletConnectionButton'
 
 const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
 
-
 interface MintButtonProps {
     quantity: number
 }
 export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
     console.log("🚀 ~ quantity:", quantity)
-    const { mintPrice, hasEnoughBalance } = useNftMintCheck()
+    const { mintPrice = 0 } = useNftMintCheck()
+    const hasEnoughBalance = () => true
     const { address } = useAccount()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -100,8 +100,8 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
 
     const encodedData = encodeFunctionData({
         abi: nftContractAbi,
-        functionName: "batchMint",
-        args: [tokens.map(i => BigInt(i))],
+        functionName: "mint",
+        args: [BigInt(0)],
     });
 
     const mintContractCalls: any[] = [
