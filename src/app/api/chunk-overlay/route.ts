@@ -1,7 +1,6 @@
-// app/api/chunk-overlay/route.ts
 import fs from 'fs';
 import path from 'path';
-import { BaseError,createPublicClient, createWalletClient, http } from 'viem';
+import { BaseError, createPublicClient, createWalletClient, http, parseGwei } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { base } from 'viem/chains';
 
@@ -45,21 +44,12 @@ export async function GET() {
       transport: http(rpcUrl),
     });
 
-    // get getOverlayChunk and getOverlayCount from the contract
-    // const getOverlayChunk = await publicClient.readContract({
-    //   address: contractAddress,
-    //   abi: nftContractAbi,
-    //   functionName: 'getOverlayChunk',
-    // });
-    // console.log("🚀 ~ GET ~ getOverlayChunk:", getOverlayChunk)
-
     const getOverlayCount = await publicClient.readContract({
       address: contractAddress,
       abi: nftContractAbi,
       functionName: "getChunkCount",
     });
     console.log("🚀 ~ GET ~ getOverlayCount:", getOverlayCount)
-
 
     const account = privateKeyToAccount(privateKey as `0x${string}`);
     
@@ -92,66 +82,79 @@ export async function GET() {
     const chunks = splitIntoChunks(base64Data, CHUNK_SIZE);
     console.log("🚀 ~ GET ~ chunks:", chunks.length)
 
-    const nonce = await publicClient.getTransactionCount({
-      address: account.address,
-    });
+    // const nonce = await publicClient.getTransactionCount({
+    //   address: account.address,
+    // });
     
-    // Upload chunks
-    const transactions = [];
+    // // Upload chunks
+    // const transactions = [];
     
-    for (let i = 0; i < chunks.length; i++) {
-      try {
-        console.log("🚀 ~ GET ~ start", i +'/' +chunks.length)
-        // Simulate transaction before sending
-        const { request } = await publicClient.simulateContract({
-          account,
-          address: contractAddress,
-          abi: nftContractAbi,
-          functionName: 'setOverlayChunk',
-          args: [BigInt(i), chunks[i]],
-        });
+    // for (let i = 0; i < chunks.length; i++) {
+    //   try {
+    //     console.log("🚀 ~ GET ~ start", i +'/' +chunks.length)
 
-        // Send transaction
-        const hash = await walletClient.writeContract({
-          ...request,
-          account,
-          chain: request.chain,
-          nonce: Number(BigInt(nonce) + BigInt(i)), // Increment nonce for each transaction
-        });
+    //     // Get current block and calculate gas parameters
+    //     const block = await publicClient.getBlock({ blockTag: 'latest' });
+    //     const baseFee = block.baseFeePerGas || parseGwei('0.001');
         
-        // Wait for confirmation
-        const receipt = await publicClient.waitForTransactionReceipt({ hash });
-        transactions.push({
-          chunk: i + 1,
-          hash: receipt.transactionHash,
-        });
-        console.log("🚀 ~ GET ~ done", i +'/' +chunks.length)
-        
-        // Add delay between chunks
-        if (i < chunks.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-      } catch (error) {
-        console.error(error)
-        return Response.json({
-          error: `Failed to upload chunk ${i + 1}`,
-          details: error instanceof BaseError ? error.message : String(error),
-          completedTransactions: transactions,
-        }, { status: 500 });
-      }
-    }
+    //     // Set gas parameters with higher values to ensure transaction goes through
+    //     const maxPriorityFeePerGas = parseGwei('2'); // 2 gwei priority fee
+    //     const maxFeePerGas = baseFee * 2n + maxPriorityFeePerGas; // Double the base fee plus priority fee
 
-    // Get final chunk count
-    const chunkCount = await publicClient.readContract({
-      address: contractAddress,
-      abi: nftContractAbi,
-      functionName: 'getChunkCount',
-    });
+    //     // Simulate transaction before sending
+    //     const { request } = await publicClient.simulateContract({
+    //       account,
+    //       address: contractAddress,
+    //       abi: nftContractAbi,
+    //       functionName: 'setOverlayChunk',
+    //       args: [BigInt(i), chunks[i]],
+    //       maxFeePerGas,
+    //       maxPriorityFeePerGas,
+    //     });
+
+    //     // Send transaction with gas parameters
+    //     const hash = await walletClient.writeContract({
+    //       ...request,
+    //       account,
+    //       chain: request.chain,
+    //       nonce: Number(BigInt(nonce) + BigInt(i)), // Increment nonce for each transaction
+    //       maxFeePerGas,
+    //       maxPriorityFeePerGas,
+    //     });
+        
+    //     // Wait for confirmation
+    //     const receipt = await publicClient.waitForTransactionReceipt({ hash });
+    //     transactions.push({
+    //       chunk: i + 1,
+    //       hash: receipt.transactionHash,
+    //     });
+    //     console.log("🚀 ~ GET ~ done", i +'/' +chunks.length)
+        
+    //     // Add delay between chunks
+    //     if (i < chunks.length - 1) {
+    //       await new Promise(resolve => setTimeout(resolve, 1000));
+    //     }
+    //   } catch (error) {
+    //     console.error(error)
+    //     return Response.json({
+    //       error: `Failed to upload chunk ${i + 1}`,
+    //       details: error instanceof BaseError ? error.message : String(error),
+    //       completedTransactions: transactions,
+    //     }, { status: 500 });
+    //   }
+    // }
+
+    // // Get final chunk count
+    // const chunkCount = await publicClient.readContract({
+    //   address: contractAddress,
+    //   abi: nftContractAbi,
+    //   functionName: 'getChunkCount',
+    // });
 
     return Response.json({
       success: true,
       totalChunks: chunks.length,
-      chunkCount: Number(chunkCount),
+      chunks
       // transactions,
     });
 

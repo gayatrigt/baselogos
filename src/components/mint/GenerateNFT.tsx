@@ -39,17 +39,17 @@ const GenerateNFT = () => {
 
         <BaseLogoPreview className='h-full lg:inset-0 lg:object-contain w-full mb-5' />
        
-        <div className='flex justify-center'>
+        <div className='flex space-x-4'>
       
-          <div className='flex items-center space-x-2 w-1/2'>
+          <div className='flex items-stretch space-x-2 flex-1 h-full'>
             <button
               onClick={handleDecrement}
-              className='hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
+              className='hover:bg-white/10 rounded-lg transition-colors h-11 w-11 aspect-square inline-flex items-center justify-center'
             >
               <MinusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
             <input
-              className='rounded sm:py-3 sm:px-4 py-2 px-2.5 border-none bg-white/75 backdrop-blur-2xl text-black/90 text-xs sm:text-base font-medium w-16 sm:w-20 text-center focus:ring-2 focus:ring-white/25 focus:outline-none'
+              className='rounded px-2.5 border-none bg-white/75 backdrop-blur-2xl text-black/90 text-xs sm:text-base font-medium w-16 sm:w-20 text-center focus:ring-2 focus:ring-white/25 focus:outline-none flex-1'
               min={1}
               type='number'
               value={value}
@@ -57,13 +57,13 @@ const GenerateNFT = () => {
             />
             <button
               onClick={handleIncrement}
-              className='hover:bg-white/10 rounded-lg transition-colors h-full aspect-square inline-flex items-center justify-center'
+              className='hover:bg-white/10 rounded-lg transition-colors h-11 w-11 aspect-square inline-flex items-center justify-center'
             >
               <PlusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
           </div>
 
-          <div>
+          <div className='flex-1 w-full'>
             <MintButton quantity={value} />
           </div>
         </div>

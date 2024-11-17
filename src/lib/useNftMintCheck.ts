@@ -8,7 +8,7 @@ export const useNftMintCheck = () => {
     const { data: mintPrice } = useReadContract({
         address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as any,
         abi: nftContractAbi,
-        functionName: "MINT_PRICE",
+        functionName: "mintPrice",
     })
 
     const { data: balance } = useBalance({

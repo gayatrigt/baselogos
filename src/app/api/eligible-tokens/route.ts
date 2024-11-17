@@ -1,4 +1,5 @@
 // app/api/eligible-tokens/route.ts
+import { nftContractAbi } from '@/lib/nftContractAbi'
 import { NextResponse } from 'next/server'
 import { Address, createPublicClient, http } from 'viem'
 import { base } from 'viem/chains'
@@ -14,6 +15,13 @@ const client = createPublicClient({
 
 export async function GET(request: Request) {
     try {
+        // const offset =await  client.readContract({
+        //                 address: CONTRACT_ADDRESS,
+        //                 abi: nftContractAbi,
+        //                 functionName: "currentTokenId",
+        //                 args: []
+        //             })
+
         // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
         const quantity = Math.min(Number(searchParams.get('quantity') || 5), 5)
@@ -35,14 +43,8 @@ export async function GET(request: Request) {
                 batchPromises.push(
                     client.readContract({
                         address: CONTRACT_ADDRESS,
-                        abi: [{
-                            name: 'isTokenIdEligible',
-                            inputs: [{ name: 'tokenId', type: 'uint256' }],
-                            outputs: [{ name: '', type: 'bool' }],
-                            stateMutability: 'view',
-                            type: 'function'
-                        }],
-                        functionName: 'isTokenIdEligible',
+                        abi: nftContractAbi,
+                        functionName: "isAvailableForMint",
                         args: [BigInt(tokenId)]
                     })
                 )

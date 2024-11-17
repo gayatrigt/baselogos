@@ -60,13 +60,13 @@ export default function RootLayout({
 
               <main className='flex-1 flex justify-center items-center'>{children}</main>
 
-              {/* <div className='pointer-events-none z-0'>
+              <div className='fixed bottom-0 pointer-events-none z-0'>
                 <img
                   src='/svg/footer-text.svg'
                   alt='Footer Text'
                   className='w-full h-auto object-cover object-bottom'
                 />
-              </div> */}
+              </div>
                             
             </div>
           </div>

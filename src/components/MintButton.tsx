@@ -20,13 +20,13 @@ interface MintButtonProps {
 }
 export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
     console.log("🚀 ~ quantity:", quantity)
-    const { mintPrice = 0 } = useNftMintCheck()
-    const hasEnoughBalance = () => true
+    const { mintPrice, hasEnoughBalance } = useNftMintCheck()
+
     const { address } = useAccount()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [tokens, setTokens] = useState<number[]>([])
-    console.log("🚀 ~ tokens:", tokens)
+    // console.log("🚀 ~ tokens:", tokens)
     
     const fetchEligibleTokens = async () => {
         try {
@@ -100,8 +100,8 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
 
     const encodedData = encodeFunctionData({
         abi: nftContractAbi,
-        functionName: "mint",
-        args: [BigInt(0)],
+        functionName: "batchMint",
+        args: [[BigInt(2)]],
     });
 
     const mintContractCalls: any[] = [
@@ -113,7 +113,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
             // to: "0xdFaebb66DFeef3b7EfE3e1C6Be0e1d5448E5Ff7d",
 
             data: encodedData,
-            value: mintPrice as any,
+            value: (mintPrice || BigInt(0)) * BigInt(quantity),
         },
     ];
 
