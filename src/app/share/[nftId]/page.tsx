@@ -18,7 +18,7 @@ export interface BaseLogoToken {
 }
 
 export default async function ShareNftPage({params}: {params: {nftId: string}}) {
-  console.log("🚀 ~ ShareNftPage ~ params:", params)
+
   const tokenUri =await  client.readContract({
       address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!,
       abi: nftContractAbi,
