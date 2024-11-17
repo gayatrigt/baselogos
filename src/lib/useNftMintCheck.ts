@@ -1,5 +1,6 @@
-import { nftContractAbi } from '@/lib/nftContractAbi'
 import { useAccount, useBalance, useReadContract } from 'wagmi'
+
+import { nftContractAbi } from '@/lib/nftContractAbi'
 
 export const useNftMintCheck = () => {
     const { address } = useAccount()
