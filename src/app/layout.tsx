@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
 import '@/styles/colors.css';
@@ -67,6 +68,7 @@ export default function RootLayout({
                   className='w-full h-auto object-cover object-bottom'
                 />
               </div>
+              <Toaster />
                             
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { Transaction, TransactionButton } from '@coinbase/onchainkit/transaction';
+import { LifecycleStatus, Transaction, TransactionButton } from '@coinbase/onchainkit/transaction';
 import { useEffect, useState } from 'react';
 import { twMerge } from "tailwind-merge";
 import { encodeFunctionData, formatEther } from "viem";
@@ -11,6 +11,7 @@ import { nftContractAbi } from '@/lib/nftContractAbi';
 import { useNftMintCheck } from '@/lib/useNftMintCheck';
 
 import WalletConnectionButton from '@/components/buttons/WalletConnectionButton';
+import toast from 'react-hot-toast';
 
 
 const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
@@ -37,6 +38,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
             
             const response = await fetch(`/api/eligible-tokens?quantity=${quantity}`)
             const data = await response.json()
+            console.log("🚀 ~ fetchEligibleTokens ~ data:", data)
             
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to fetch eligible tokens')
@@ -52,56 +54,58 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
 
     const getButtonText = () => {
         if (!hasEnoughBalance()) return "Insufficient Balance";
-        return `Mint for ${mintPrice && formatEther(mintPrice)} ETH`;
+        return `Mint for ${mintPrice && formatEther(mintPrice * BigInt(quantity))} ETH`;
     }
 
-    // const handleOnStatus = async (status: LifecycleStatus) => {
-    //     // setSidebarMode("loading");
+    const handleOnStatus = async (status: LifecycleStatus) => {
+        // setSidebarMode("loading");
 
-    //     if (status.statusName !== 'success') {
-    //         return
-    //     }
+        if (status.statusName !== 'success') {
+            return
+        }
 
-    //     const hash = status.statusData.transactionReceipts[0]?.transactionHash
+        const hash = status.statusData.transactionReceipts?.[0]?.transactionHash
 
-    //     if (!hash) {
-    //         return;
-    //     }
+        if (!hash) {
+            return;
+        }
 
-    //     try {
-    //         // const tokenDataRes = await getTokenUriFromHash(hash)
-    //         // setMintedNftMetadata(tokenDataRes.tokenData)
+        toast.success('Successfully Minted!!!')
 
-    //         // await fetchOwnedArrows(account.address as any);
-    //         // setSidebarMode("success");
+        // try {
+        //     // const tokenDataRes = await getTokenUriFromHash(hash)
+        //     // setMintedNftMetadata(tokenDataRes.tokenData)
 
-    //         // router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
-    //         // setSidebarMode("success");
-    //         // setTextValue([])
-    //     } catch (error) {
-    //         console.error(error);
+        //     // await fetchOwnedArrows(account.address as any);
+        //     // setSidebarMode("success");
 
-    //         // setSidebarMode("mint");
+        //     // router.push(`/canvas?panel=text&tokenid=${tokenDataRes.tokenId}`)
+        //     // setSidebarMode("success");
+        //     // setTextValue([])
+        // } catch (error) {
+        //     console.error(error);
 
-    //         const showToUser = (error as any).showToUser;
-    //         const errorMessage = (error as any).message;
-    //         // toast(
-    //         //     showToUser ? {
-    //         //         variant: "destructive",
-    //         //         title: errorMessage,
-    //         //     } : {
-    //         //         variant: "destructive",
-    //         //         title: 'Something went wrong.',
-    //         //         description: 'Could not mint NFT, please try again later.'
-    //         //     }
-    //         // );
-    //     }
-    // }
+        //     // setSidebarMode("mint");
+
+        //     const showToUser = (error as any).showToUser;
+        //     const errorMessage = (error as any).message;
+        //     // toast(
+        //     //     showToUser ? {
+        //     //         variant: "destructive",
+        //     //         title: errorMessage,
+        //     //     } : {
+        //     //         variant: "destructive",
+        //     //         title: 'Something went wrong.',
+        //     //         description: 'Could not mint NFT, please try again later.'
+        //     //     }
+        //     // );
+        // }
+    }
 
     const encodedData = encodeFunctionData({
         abi: nftContractAbi,
         functionName: "batchMint",
-        args: [[BigInt(2)]],
+        args: [tokens.map(token => BigInt(token))],
     });
 
     const mintContractCalls: any[] = [
@@ -134,13 +138,13 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
                 !!address &&
 
                 <Transaction
-                    key={quantity}
+                    key={JSON.stringify(tokens)}
                     chainId={base.id}
                     calls={mintContractCalls}
-                    // onStatus={handleOnStatus}
+                    onStatus={handleOnStatus}
                 >
                     <TransactionButton
-                        disabled={!hasEnoughBalance()}
+                        disabled={!hasEnoughBalance() || loading}
                         className={twMerge(
                             'w-full h-full bg-brand text-white py-3 cursor-pointer font-medium tracking-wider text-xl hover:bg-brand/80 focus:bg-brand/80 flex items-center justify-center space-x-2 rounded-md',
                             "inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 font-bold uppercase  cursor-pointer [&>*]:text-white ",

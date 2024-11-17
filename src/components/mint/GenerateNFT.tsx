@@ -12,14 +12,8 @@ import PlusIcon from '../../../public/svg/plus.svg';
 const GenerateNFT = () => {
   const [value, setValue] = useState(1);
 
-  // const { data: tokenCount } = useReadContract({
-  //       address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as any,
-  //       abi: nftContractAbi,
-  //       functionName: "TOKEN_COUNT",
-  //   })
-
   const handleIncrement = () => {
-    setValue((prev) => prev + 1);
+    setValue((prev) => Math.min(prev + 1, 20));
   };
 
   const handleDecrement = () => {
@@ -51,6 +45,7 @@ const GenerateNFT = () => {
             <input
               className='rounded px-2.5 border-none bg-white/75 backdrop-blur-2xl text-black/90 text-xs sm:text-base font-medium w-16 sm:w-20 text-center focus:ring-2 focus:ring-white/25 focus:outline-none flex-1'
               min={1}
+              max={20}
               type='number'
               value={value}
               onChange={handleChange}
