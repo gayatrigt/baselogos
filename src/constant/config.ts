@@ -1,5 +1,5 @@
 export const siteConfig = {
-  title: 'BaseLogos',
+  title: 'Base Logos',
   description: 'Mint Base Logo in Base Colors',
-  url: 'https://tsnext-tw.thcl.dev',
+  url: 'https://baselogos.com/',
 };

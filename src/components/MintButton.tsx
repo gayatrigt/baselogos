@@ -15,7 +15,6 @@ import WalletConnectionButton from '@/components/buttons/WalletConnectionButton'
 
 const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
 
-
 interface MintButtonProps {
     quantity: number
 }
