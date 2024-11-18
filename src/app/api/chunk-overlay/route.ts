@@ -29,14 +29,14 @@ export async function GET() {
 
     // Get environment variables
     const rpcUrl = base.rpcUrls.default.http[0];
-    const privateKey = "0x" + process.env.PRIVATE_KEY;
+    // const privateKey = "0x" + process.env.PRIVATE_KEY;
 
-    if (!rpcUrl || !privateKey) {
-      return Response.json(
-        { error: 'Missing environment configuration' },
-        { status: 500 }
-      );
-    }
+    // if (!rpcUrl || !privateKey) {
+    //   return Response.json(
+    //     { error: 'Missing environment configuration' },
+    //     { status: 500 }
+    //   );
+    // }
 
     // Create Viem clients
     const publicClient = createPublicClient({
@@ -51,13 +51,13 @@ export async function GET() {
     });
     console.log("🚀 ~ GET ~ getOverlayCount:", getOverlayCount)
 
-    const account = privateKeyToAccount(privateKey as `0x${string}`);
+    // const account = privateKeyToAccount(privateKey as `0x${string}`);
     
-    const walletClient = createWalletClient({
-      account,
-      chain: base,
-      transport: http(rpcUrl),
-    });
+    // const walletClient = createWalletClient({
+    //   account,
+    //   chain: base,
+    //   transport: http(rpcUrl),
+    // });
 
     // Check if signer is contract owner
     // const contractOwner = await publicClient.readContract({
