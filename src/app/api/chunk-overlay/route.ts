@@ -60,18 +60,18 @@ export async function GET() {
     });
 
     // Check if signer is contract owner
-    const contractOwner = await publicClient.readContract({
-      address: contractAddress as any,
-      abi: nftContractAbi,
-      functionName: 'owner',
-    });
+    // const contractOwner = await publicClient.readContract({
+    //   address: contractAddress as any,
+    //   abi: nftContractAbi,
+    //   functionName: 'owner',
+    // });
 
-    if (contractOwner.toLowerCase() !== account.address.toLowerCase()) {
-      return Response.json(
-        { error: 'Signer must be contract owner' },
-        { status: 403 }
-      );
-    }
+    // if (contractOwner.toLowerCase() !== account.address.toLowerCase()) {
+    //   return Response.json(
+    //     { error: 'Signer must be contract owner' },
+    //     { status: 403 }
+    //   );
+    // }
 
     // Read the PNG file from public directory
     const imagePath = path.join(process.cwd(), 'public', 'base-overlay-optimised.png');

@@ -15,12 +15,13 @@ const client = createPublicClient({
 
 export async function GET(request: Request) {
     try {
-        // const offset =await  client.readContract({
-        //                 address: CONTRACT_ADDRESS,
-        //                 abi: nftContractAbi,
-        //                 functionName: "currentTokenId",
-        //                 args: []
-        //             })
+        // const offset = 0
+        const offset = await client.readContract({
+                        address: CONTRACT_ADDRESS,
+                        abi: nftContractAbi,
+                        functionName: "getCurrentTokenId",
+                        args: []
+                    })
 
         // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
         console.log("🚀 ~ GET ~ quantity:", quantity)
 
         const selectedTokens: number[] = []
-        let currentId = 0
+        let currentId = Number(offset) || 0;
         const MAX_SUPPLY = 10000
         const BATCH_SIZE = 50
 
