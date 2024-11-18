@@ -26,7 +26,7 @@ export default function ShareNft(props: ShareNftProps) {
 
   const handleOpenSeaView = () => {
     // Replace with your actual OpenSea collection URL
-    const openSeaUrl = `https://opensea.io/assets/base/${props.tokenId}`;
+    const openSeaUrl = `https://opensea.io/assets/base/${process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS}/${props.tokenId}`;
     window.open(openSeaUrl, '_blank');
   };
 
@@ -49,10 +49,10 @@ export default function ShareNft(props: ShareNftProps) {
   };
 
   return (
-    <div className='md:mt-7 mt-5 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3'>
+    <div className='md:mt-7 mt-5 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 w-full max-w-2xl'>
       <img
         src={props.token.image}
-        className='aspect-square w-full h-full'
+        className='aspect-square w-full h-full rounded-md'
         alt={props.token.name}
       />
       <div className='flex justify-between items-center mt-3'>

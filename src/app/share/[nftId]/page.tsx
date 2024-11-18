@@ -30,9 +30,9 @@ export default async function ShareNftPage({params}: {params: {nftId: string}}) 
   
   return (
     <div className='mx-auto flex flex-col w-screen items-center justify-center px-5'>
-      <h1 className='md:mt-7 mt-5 text-black md:text-6xl text-2xl font-semibold'>
+      {/* <h1 className='md:mt-7 mt-5 text-black md:text-6xl text-2xl font-semibold'>
         Share your NFT
-      </h1>
+      </h1> */}
       <ShareNft token={data} tokenId={params.nftId} />
     </div>
   );
