@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import { BaseLogoToken } from '@/app/share/[nftId]/page';
+
 import DownloadIcon from '../../../public/svg/download.svg';
 import OpenSeaIcon from '../../../public/svg/open-sea.svg';
 import WarpcastIcon from '../../../public/svg/warpcast.svg';
@@ -15,13 +16,19 @@ export default function ShareNft(props: ShareNftProps) {
   const handleWarpcastShare = () => {
     const text = `Check out my Base Logo NFT: ${props.token.name}\n`;
     const url = `${window.location.origin}/share/${props.tokenId}`;
-    window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    window.open(
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(url)}`,
+      '_blank',
+    );
   };
 
   const handleTwitterShare = () => {
     const text = `Check out my Base Logo NFT: ${props.token.name}\n`;
     const url = `${window.location.origin}/share/${props.tokenId}`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      '_blank',
+    );
   };
 
   const handleOpenSeaView = () => {
@@ -37,7 +44,7 @@ export default function ShareNft(props: ShareNftProps) {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${props.token.name}.png`; // or appropriate extension
+      link.download = `${props.token.name}.svg`; // or appropriate extension
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -49,7 +56,7 @@ export default function ShareNft(props: ShareNftProps) {
   };
 
   return (
-    <div className='md:mt-7 mt-5 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 w-full max-w-2xl'>
+    <div className='md:mt-7 mt-5 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 max-w-lg w-full'>
       <img
         src={props.token.image}
         className='aspect-square w-full h-full rounded-md'
@@ -67,28 +74,28 @@ export default function ShareNft(props: ShareNftProps) {
         <button
           onClick={handleWarpcastShare}
           className='rounded md:py-3 md:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 text-base font-medium w-full flex items-center justify-center hover:bg-white/85 transition-colors'
-          aria-label="Share on Warpcast"
+          aria-label='Share on Warpcast'
         >
           <WarpcastIcon className='w-[22px] h-[22px]' />
         </button>
         <button
           onClick={handleTwitterShare}
           className='rounded md:py-3 md:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 text-base font-medium w-full flex items-center justify-center hover:bg-white/85 transition-colors'
-          aria-label="Share on Twitter"
+          aria-label='Share on Twitter'
         >
           <XIcon className='w-[22px] h-[22px]' />
         </button>
         <button
           onClick={handleOpenSeaView}
           className='rounded md:py-3 md:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 text-base font-medium w-full flex items-center justify-center hover:bg-white/85 transition-colors'
-          aria-label="View on OpenSea"
+          aria-label='View on OpenSea'
         >
           <OpenSeaIcon className='w-[22px] h-[22px]' />
         </button>
         <button
           onClick={handleDownload}
           className='rounded md:py-3 md:px-4 py-2 px-2.5 bg-white/75 backdrop-blur-2xl text-black/90 text-base font-medium w-full flex items-center justify-center hover:bg-white/85 transition-colors'
-          aria-label="Download image"
+          aria-label='Download image'
         >
           <DownloadIcon className='w-[22px] h-[22px]' />
         </button>
