@@ -64,6 +64,9 @@ export default function RootLayout({
                 className='w-full h-auto object-cover object-bottom'
               />
             </div>
+            <div className='fixed bottom-3 px-3 flex justify-end w-full'>
+              <div className='bg-white shadow-xl rounded-lg py-1 px-4'>Built with ❤️ by <a target='__blank' className='underline' href="https://warpcast.com/gayatri">@gayatri</a></div>
+            </div>
             <Toaster />
           </div>
         </Providers>
