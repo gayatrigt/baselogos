@@ -22,15 +22,22 @@ const CongratsPage = async ({searchParams}: {searchParams: {hash: string}}) =>{
   }
 
   const {ids, tokens} = await getTokenIdsFromTransaction(searchParams.hash as Address)
+ 
+  const getGridCols = (length: number) => {
+    switch(length) {
+      case 1: return '';
+      case 2: return 'grid-cols-2';
+      case 3: return 'grid-cols-3';
+      default: return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+    }
+  }
 
   return (
     <div className='mx-auto flex flex-col w-screen items-center justify-center px-5 py-12'>
-      <div className="grid grid-cols-4 gap-4 justify-center">
-        {
-          ids.map((id, idx) => {
-            return <ShareNft key={id} token={tokens[idx]} tokenId={id} />
-          })
-        }
+      <div className={`grid ${getGridCols(ids.length)} gap-4 place-items-center`}>
+        {ids.map((id, idx) => (
+          <ShareNft key={id} token={tokens[idx]} tokenId={id} />
+        ))}
       </div>
     </div>
   );
