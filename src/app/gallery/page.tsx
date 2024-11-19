@@ -75,7 +75,7 @@ export default function GalleryPage() {
                 : 'text-gray-500'
             }`}
           >
-            Recent
+            Recent Minted
           </button>
           <button
             onClick={() => setActiveView('owned')}
@@ -88,7 +88,7 @@ export default function GalleryPage() {
                   : 'text-gray-500'
             }`}
           >
-            Owned
+            My Base Logos
           </button>
         </div>
       </div>
@@ -114,14 +114,17 @@ export default function GalleryPage() {
                     key={nft.identifier}
                     className='flex flex-col items-start transition-transform duration-300 hover:scale-105 cursor-pointer'
                   >
+                       <a href={nft.opensea_url} target="_blank" rel="noopener noreferrer">
                     <img
                       src={nft.display_image_url}
                       alt={nft.name}
                       className='rounded md:w-[180px] md:h-[180px] w-[90px] h-[90px]'
                     />
                     <span className='md:mt-2 mt-1 text-white md:text-base text-[10px] md:font-semibold whitespace-nowrap'>
-                      New Color #{nft.identifier.toString().padStart(4, '0')}
+                      {nft.name}
                     </span>
+                    </a>
+                
                   </div>
                 )),
               )}
