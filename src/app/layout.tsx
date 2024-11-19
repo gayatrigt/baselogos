@@ -51,12 +51,9 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          <div className='relative h-screen overflow-hidden'>
-            <div className='absolute inset-0 -z-10'>
-              <div className='absolute inset-0 bg-[url("/images/bg.png")] bg-cover bg-center' />
-            </div>
+          <div className='relative min-h-screen bg-[url("/images/bg.png")] bg-center bg-fixed'>
 
-            <div className='relative z-10 h-[100dvh] flex flex-col'>
+            <div className='relative z-10 min-h-[100dvh] flex flex-col'>
               <Header />
 
               <main className='flex-1 flex justify-center items-center'>{children}</main>

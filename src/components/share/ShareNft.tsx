@@ -1,5 +1,6 @@
 'use client';
 
+
 import { BaseLogoToken } from '@/app/share/[nftId]/page';
 
 import DownloadIcon from '../../../public/svg/download.svg';
@@ -13,6 +14,8 @@ interface ShareNftProps {
 }
 
 export default function ShareNft(props: ShareNftProps) {
+  console.log({token: props.token})
+ 
   const handleWarpcastShare = () => {
     const text = `Check out my Base Logo NFT: ${props.token.name}\n`;
     const url = `${window.location.origin}/share/${props.tokenId}`;
@@ -56,7 +59,7 @@ export default function ShareNft(props: ShareNftProps) {
   };
 
   return (
-    <div className='md:mt-7 mt-5 rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 max-w-lg w-full'>
+    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl md:p-5 p-3 max-w-lg w-full h-fit'>
       <img
         src={props.token.image}
         className='aspect-square w-full h-full rounded-md'
