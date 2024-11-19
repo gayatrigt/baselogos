@@ -26,9 +26,9 @@ const CongratsPage = async ({searchParams}: {searchParams: {hash: string}}) =>{
   const getGridCols = (length: number) => {
     switch(length) {
       case 1: return '';
-      case 2: return 'grid-cols-2';
-      case 3: return 'grid-cols-3';
-      default: return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+      case 2: return 'md:grid-cols-2';
+      case 3: return 'md:grid-cols-3';
+      default: return 'md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
     }
   }
 
