@@ -51,23 +51,20 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          <div className='relative min-h-screen bg-[url("/images/bg.png")] bg-center bg-fixed'>
-
-            <div className='relative z-10 min-h-[100dvh] flex flex-col'>
-              <Header />
-
-              <main className='flex-1 flex justify-center items-center'>{children}</main>
-
-              <div className='fixed bottom-0 pointer-events-none z-0'>
-                <img
-                  src='/svg/footer-text.svg'
-                  alt='Footer Text'
-                  className='w-full h-auto object-cover object-bottom'
-                />
-              </div>
-              <Toaster />
-                            
+          <div className='fixed inset-0 w-screen h-screen bg-[url("/images/bg.png")] bg-cover bg-fixed' />
+          
+          <div className='relative z-10 min-h-screen flex flex-col'>
+            <Header />
+            <main className='flex-1 flex justify-center items-center'>{children}</main>
+            
+            <div className='fixed bottom-0 pointer-events-none z-0'>
+              <img
+                src='/svg/footer-text.svg'
+                alt='Footer Text'
+                className='w-full h-auto object-cover object-bottom'
+              />
             </div>
+            <Toaster />
           </div>
         </Providers>
       </body>
