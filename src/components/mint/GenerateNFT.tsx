@@ -21,9 +21,13 @@ const GenerateNFT = () => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if(!e.target.value?.length) {
+      setValue(0);
+    }
+
     const newValue = parseInt(e.target.value);
     if (!isNaN(newValue) && newValue >= 1) {
-      setValue(newValue);
+      setValue(Math.min(newValue, 20));
     }
   };
 
