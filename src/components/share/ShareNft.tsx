@@ -14,8 +14,6 @@ interface ShareNftProps {
 }
 
 export default function ShareNft(props: ShareNftProps) {
-  console.log({token: props.token})
- 
   const handleWarpcastShare = () => {
     const text = `Check out my Base Logo NFT: ${props.token.name}\n`;
     const url = `${window.location.origin}/share/${props.tokenId}`;
