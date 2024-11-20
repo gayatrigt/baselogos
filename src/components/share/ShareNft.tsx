@@ -42,18 +42,82 @@ export default function ShareNft(props: ShareNftProps) {
 
   const handleDownload = async () => {
     try {
+      // Fetch the SVG data
       const response = await fetch(props.token.image);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${props.token.name}.svg`; // or appropriate extension
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      let svgText = await response.text();
+
+      // change the height and width of the svg to 600 from 100
+      svgText = svgText.replaceAll('height="100"', 'height="600"');
+      svgText = svgText.replaceAll('width="100"', 'width="600"');
+      svgText = svgText.replace('0 0 100 100', '0 0 600 600');
+
+        
+      // Parse SVG
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+      const svgElement = svgDoc.documentElement;
+      
+      // Get SVG dimensions
+      const viewBox = svgElement.getAttribute('viewBox')?.split(' ').map(Number);
+      const width = svgElement.getAttribute('width') || viewBox?.[2] || 300;
+      const height = svgElement.getAttribute('height') || viewBox?.[3] || 150;
+      
+      // Optional: Modify SVG here if needed
+      // Example: svgElement.setAttribute('width', '500');
+      
+      // Convert SVG back to string
+      const serializer = new XMLSerializer();
+      const modifiedSvgText = serializer.serializeToString(svgElement);
+      
+      // Create SVG blob
+      const svgBlob = new Blob([modifiedSvgText], { type: 'image/svg+xml' });
+      const svgUrl = URL.createObjectURL(svgBlob);
+
+      // Create a new Image object
+      const img = new Image();
+      img.width = Number(width);
+      img.height = Number(height);
+      img.src = svgUrl;
+
+      // Wait for image to load
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = (e) => reject(new Error(e.toString()));
+      });
+
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas size
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // Optional: Set background color if needed
+      // ctx.fillStyle = 'white';
+      // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw image to canvas
+      ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Convert canvas to PNG blob
+      canvas.toBlob((pngBlob) => {
+        if(!pngBlob) return;
+        // Create download link
+        const pngUrl = URL.createObjectURL(pngBlob);
+        const link = document.createElement('a');
+        link.href = pngUrl;
+        link.download = `${props.token.name}.png`;
+        document.body.appendChild(link);
+        link.click();
+        
+        // Cleanup
+        document.body.removeChild(link);
+        URL.revokeObjectURL(pngUrl);
+        URL.revokeObjectURL(svgUrl);
+      }, 'image/png');
     } catch (error) {
-      console.error('Error downloading image:', error);
+      console.error('Error converting and downloading image:', error);
       alert('Failed to download image. Please try again.');
     }
   };
