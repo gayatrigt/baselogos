@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: { nftId: string } }
   })
 
   const data: BaseLogoToken = await fetch(tokenUri).then(a => a.json())
-  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+  const baseUrl = 'https://www.baselogos.com'
 
   // Regular OG image URL
   const ogUrl = `${baseUrl}/api/og?token=${params.nftId}`
