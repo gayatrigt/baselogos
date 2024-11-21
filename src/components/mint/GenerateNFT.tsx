@@ -26,6 +26,7 @@ const GenerateNFT = () => {
     }
 
     const newValue = parseInt(e.target.value);
+    
     if (!isNaN(newValue) && newValue >= 1) {
       setValue(Math.min(newValue, 20));
     }

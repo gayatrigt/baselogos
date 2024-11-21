@@ -11,7 +11,7 @@ const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as Address
 // Create a singleton client instance
 const client = createPublicClient({
     chain: base,
-    transport: http(base.rpcUrls.default.http[0])
+    transport: http("https://base-mainnet.g.alchemy.com/v2/LQBTxwHxVNA6YdEoWNqtFY9Z24pxAAAv")
 })
 
 export async function GET(request: Request) {
@@ -26,8 +26,7 @@ export async function GET(request: Request) {
 
         // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
-        const quantity = Math.min(Number(searchParams.get('quantity') || 5), 20)
-        console.log("🚀 ~ GET ~ quantity:", quantity)
+        const quantity = Math.min(Number(searchParams.get('quantity') || 1), 20)
 
         const selectedTokens: number[] = []
         let currentId = Number(offset) || 0;

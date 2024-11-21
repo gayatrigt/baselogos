@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { twMerge } from "tailwind-merge";
 import { encodeFunctionData, formatEther } from "viem";
-import { useAccount, usePublicClient } from "wagmi";
+import { useAccount } from "wagmi";
 import { base } from 'wagmi/chains';
 
 import { nftContractAbi } from '@/lib/nftContractAbi';
@@ -31,12 +31,8 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
     const [error, setError] = useState<string | null>(null)
     const [tokens, setTokens] = useState<number[]>([])
 
-    const publicClient = usePublicClient()
-    
     const fetchEligibleTokens = async () => {
         try {
-            if(loading) return
-
             setLoading(true)
             setError(null)
             
@@ -120,6 +116,8 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
         },
     ];
 
+    const isProperOrder = tokens.length === quantity && tokens.every(token => typeof token === 'number')
+
     return (
         <div className="relative w-full">
             <div className="w-full flex space-x-2 justify-center items-center">
@@ -132,7 +130,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
                         onStatus={handleOnStatus}
                     >
                         <TransactionButton
-                            disabled={!hasEnoughBalance() || loading}
+                            disabled={!hasEnoughBalance() || loading || !isProperOrder}
                             className={twMerge(
                                 'w-full h-full bg-brand text-white py-3 cursor-pointer font-medium tracking-wider text-xl hover:bg-brand/80 focus:bg-brand/80 flex items-center justify-center space-x-2 rounded-md',
                                 "inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 font-bold uppercase cursor-pointer [&>*]:text-white",
