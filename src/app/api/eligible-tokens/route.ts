@@ -1,8 +1,9 @@
 // app/api/eligible-tokens/route.ts
-import { nftContractAbi } from '@/lib/nftContractAbi'
 import { NextResponse } from 'next/server'
 import { Address, createPublicClient, http } from 'viem'
 import { base } from 'viem/chains'
+
+import { nftContractAbi } from '@/lib/nftContractAbi'
 
 // Note: Move these to environment variables
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as Address
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
 
         // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
-        const quantity = Math.min(Number(searchParams.get('quantity') || 5), 5)
+        const quantity = Math.min(Number(searchParams.get('quantity') || 5), 20)
         console.log("🚀 ~ GET ~ quantity:", quantity)
 
         const selectedTokens: number[] = []
