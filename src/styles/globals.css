@@ -94,6 +94,11 @@
   }
 }
 
+.bg-opacity-20 {
+  --tw-bg-opacity: 0.2 !important;
+  backdrop-filter: blur(5px);
+}
+
 @layer utilities {
   .animated-underline {
     background-image: linear-gradient(#33333300, #33333300),
