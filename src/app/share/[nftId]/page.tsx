@@ -1,5 +1,6 @@
 'use server';
 
+import { Metadata } from 'next';
 import { createPublicClient, http } from 'viem'
 import { base } from 'viem/chains'
 
