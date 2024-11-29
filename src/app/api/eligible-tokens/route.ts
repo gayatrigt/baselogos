@@ -1,81 +1,75 @@
-// app/api/eligible-tokens/route.ts
 import { NextResponse } from 'next/server'
 import { Address, createPublicClient, http } from 'viem'
 import { base } from 'viem/chains'
 
 import { nftContractAbi } from '@/lib/nftContractAbi'
 
-// Note: Move these to environment variables
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as Address
+const MAX_SUPPLY = 10000
+const BATCH_SIZE = 50
 
-// Create a singleton client instance
 const client = createPublicClient({
     chain: base,
     transport: http("https://base-mainnet.g.alchemy.com/v2/LQBTxwHxVNA6YdEoWNqtFY9Z24pxAAAv")
 })
 
+function getRandomNumbers(count: number, max: number): number[] {
+    const numbers = new Set<number>()
+    while (numbers.size < count) {
+        numbers.add(Math.floor(Math.random() * max))
+    }
+    return Array.from(numbers)
+}
+
 export async function GET(request: Request) {
     try {
-        // const offset = 0
-        const offset = await client.readContract({
-                        address: CONTRACT_ADDRESS,
-                        abi: nftContractAbi,
-                        functionName: "getCurrentTokenId",
-                        args: []
-                    })
-
-        // Get quantity from query params, default to 5
         const { searchParams } = new URL(request.url)
         const quantity = Math.min(Number(searchParams.get('quantity') || 1), 20)
-
         const selectedTokens: number[] = []
-        let currentId = Number(offset) || 0;
-        const MAX_SUPPLY = 10000
-        const BATCH_SIZE = 50
-
-        while (selectedTokens.length < quantity && currentId < MAX_SUPPLY) {
-            const batchPromises = []
-            const batchIds = []
+        const checkedTokens = new Set<number>()
+        
+        while (selectedTokens.length < quantity && checkedTokens.size < MAX_SUPPLY) {
+            // Get a batch of random numbers we haven't checked yet
+            const randomBatch = getRandomNumbers(BATCH_SIZE, MAX_SUPPLY)
+                .filter(num => !checkedTokens.has(num))
             
-            // Create batch of promises
-            for (let i = 0; i < BATCH_SIZE && currentId + i < MAX_SUPPLY; i++) {
-                const tokenId = currentId + i
-                batchIds.push(tokenId)
-                batchPromises.push(
-                    client.readContract({
-                        address: CONTRACT_ADDRESS,
-                        abi: nftContractAbi,
-                        functionName: "isAvailableForMint",
-                        args: [BigInt(tokenId)]
-                    })
-                )
-            }
-
-            // Wait for all checks in batch
+            if (randomBatch.length === 0) continue
+            
+            // Add to checked tokens
+            randomBatch.forEach(num => checkedTokens.add(num))
+            
+            // Check eligibility in batch
+            const batchPromises = randomBatch.map(tokenId =>
+                client.readContract({
+                    address: CONTRACT_ADDRESS,
+                    abi: nftContractAbi,
+                    functionName: "isAvailableForMint",
+                    args: [BigInt(tokenId)]
+                })
+            )
+            
             const results = await Promise.all(batchPromises)
-
-            // Add eligible tokens to selection
+            
+            // Add eligible tokens
             for (let i = 0; i < results.length; i++) {
                 if (results[i] && selectedTokens.length < quantity) {
-                    selectedTokens.push(batchIds[i])
+                    selectedTokens.push(randomBatch[i])
                 }
             }
-
-            currentId += BATCH_SIZE
         }
-
+        
         if (selectedTokens.length < quantity) {
             return NextResponse.json(
                 { error: 'Not enough eligible tokens found' },
                 { status: 400 }
             )
         }
-
+        
         return NextResponse.json({
             tokens: selectedTokens,
             quantity: selectedTokens.length
         })
-
+        
     } catch (error) {
         console.error('Error finding eligible tokens:', error)
         return NextResponse.json(
