@@ -121,7 +121,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
     return (
         <div className="relative w-full">
             <div className="w-full flex space-x-2 justify-center items-center">
-                {!address && <WalletConnectionButton />}
+                {/* {!address && <WalletConnectionButton />}
                 {!!address && (
                     <Transaction
                         key={JSON.stringify(tokens)}
@@ -139,7 +139,7 @@ export const MintButton: React.FC<MintButtonProps> = ({quantity}) => {
                             text={getButtonText()}
                         />
                     </Transaction>
-                )}
+                )} */}
             </div>
             {!!address && !hasEnoughBalance() && (
                 <div className="top-full text-xs mt-1 font-semibold text-center w-full">

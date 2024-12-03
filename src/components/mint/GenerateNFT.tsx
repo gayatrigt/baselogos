@@ -4,10 +4,7 @@ import { ChangeEvent, useState } from 'react';
 
 // import BaseLogo from '../../../public/svg/base-logo.svg';
 import BaseLogoPreview from '@/components/BaseLogoPreview';
-import { MintButton } from '@/components/MintButton';
 
-import MinusIcon from '../../../public/svg/minus.svg';
-import PlusIcon from '../../../public/svg/plus.svg';
 
 const GenerateNFT = () => {
   const [value, setValue] = useState(1);
@@ -33,14 +30,14 @@ const GenerateNFT = () => {
   };
 
   return (
-    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 w-full max-w-xl'>
+    <div className='rounded-lg bg-black/20 shadow-inner backdrop-blur-2xl p-3 md:p-5 w-full max-w-xl  justify-center items-center'>
       <div className='flex flex-col h-full'>
 
         <BaseLogoPreview className='h-full lg:inset-0 lg:object-contain w-full mb-5' />
        
-        <div className='flex space-x-4'>
+        <div className='flex space-x-4 items-center justify-center'>
       
-          <div className='flex items-stretch space-x-2 flex-1 h-full'>
+          {/* <div className='flex items-stretch space-x-2 flex-1 h-full'>
             <button
               onClick={handleDecrement}
               className='hover:bg-white/10 rounded-lg transition-colors h-11 w-11 aspect-square inline-flex items-center justify-center'
@@ -61,11 +58,22 @@ const GenerateNFT = () => {
             >
               <PlusIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
-          </div>
+          </div> */}
 
-          <div className='flex-1 w-full'>
-            <MintButton quantity={value} />
-          </div>
+<div className='flex flex-col rounded px-2.5 py-2 border-none bg-white/75 backdrop-blur-2xl items-center text-center'>
+              <span className='text-black/90 text-xs sm:text-base font-medium text-center focus:ring-2 focus:ring-white/25 focus:outline-none'>
+                10,000 Minted Out
+              </span>
+              <a 
+                href="https://opensea.io/collection/base-logos" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className='inline-block'
+              >
+                <img src="/OpenSeaD.svg" alt="OpenSea" className='w-32'/>
+              </a>
+            </div>
+         
         </div>
       </div>
     </div>
